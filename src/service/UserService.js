@@ -7,13 +7,14 @@ const UserService = {
     try {
       const pool = sql.createPool(config);
       const connection = await pool.getConnection(async (conn) => conn);
-      
 
       try {
         await connection.beginTransaction();
         try {
           result = await connection.query(`insert into User values('${user_id}', '${user_pw}')`);
-        } catch (error) {return false;}
+        } catch (error) {
+          return false;
+        }
         await connection.commit();
       } catch (err) {
         await connection.rollback();
@@ -24,13 +25,13 @@ const UserService = {
       }
 
       result = {
-        "result" : 'success'
-      }
+        result: 'success',
+      };
       return result;
     } catch (error) {
       result = {
-        "result" : 'fail'
-      }
+        result: 'fail',
+      };
       throw new Error(`USER/${error}`);
     }
   },
@@ -40,7 +41,7 @@ const UserService = {
     try {
       const pool = sql.createPool(config);
       const connection = await pool.getConnection(async (conn) => conn);
-      
+
       try {
         await connection.beginTransaction();
         try {
@@ -57,15 +58,15 @@ const UserService = {
         pool.end();
       }
 
-      if(result[0].length == 0){
+      if (result[0].length == 0) {
         result = {
-          "result" : 'fail'
-        }
-      }
-      else result = {
-        "result" : 'success'
-      }
-      
+          result: 'fail',
+        };
+      } else
+        result = {
+          result: 'success',
+        };
+
       console.log(result);
       return result;
     } catch (error) {
@@ -73,7 +74,7 @@ const UserService = {
     }
   },
 
-  userinfo : async (user_id) => {
+  userinfo: async (user_id) => {
     let result = [];
     try {
       const pool = sql.createPool(config);
@@ -84,19 +85,28 @@ const UserService = {
       try {
         await connection.beginTransaction();
         try {
-          posts = await connection.query(
-            `select * from Post where user_id = ?`, [user_id]);
+          posts = await connection.query(`select * from Post where user_id = ?`, [user_id]);
           posts = posts[0];
 
-          followers = await connection.query(
-            `select * from User_follow where following_id = ?`, [user_id]);
-          followers = followers[0].length
+          is_following = await connection.query(`SELECT following_id FROM User_follow WHERE user_id = ?`, [user_id]);
+          is_following = posts[0];
+
+          if (is_following == 0) {
+            // 팔로우 안 함
+            is_following = null;
+          } else {
+            is_following = user_id;
+          }
+
+          followers = await connection.query(`select * from User_follow where following_id = ?`, [user_id]);
+          followers = followers[0].length;
           console.log(followers);
 
           result = {
-            "posts" : posts,
-            "followers" :  followers
-          }
+            posts: posts,
+            is_following: is_following,
+            followers: followers,
+          };
         } catch (error) {
           return false;
         }
