@@ -12,22 +12,24 @@ router.get("/", async (req, res) => {
 router.post("/signup", async (req, res) => {
     const result = await UserService.signup(
         req.body.user_id, 
-        req.body.user_email, 
-        req.body.user_password,
-        req.body.user_nickname, 
-        req.body.user_gender, 
-        req.body.user_phonenumber, 
-        req.body.user_age
+        req.body.user_pw
     );
     res.send(result);
 });
 
 router.post("/login", async (req, res) => {
     const result = await UserService.login(
-        req.body.user_email, 
-        req.body.user_password
+        req.body.user_id, 
+        req.body.user_pw
     );
-    console.log(result);
+    
+    res.send(result);
+});
+
+router.post("/userinfo", async (req, res) => {
+    const result = await UserService.userinfo(
+        req.body.user_id
+    );
     res.send(result);
 });
 
