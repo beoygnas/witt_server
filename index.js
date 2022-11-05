@@ -23,6 +23,7 @@ app.use(
 //router
 app.use('/user', userController);
 app.use('/feed', feedController);
+app.use('/static', express.static('static'));
 
 app.get((req, res) => {
   res.status(404).send('not found');

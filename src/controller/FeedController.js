@@ -1,7 +1,7 @@
 import express, { Router } from 'express';
 import 'express-promise-router';
-import UserService from '../service/UserService.js';
-const multer = require('multer');
+import multer from 'multer';
+import FeedService from '../service/FeedService.js';
 
 //정적 라우터
 const router = new Router();
@@ -12,22 +12,51 @@ router.get('/', async (req, res) => {
 
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, '../static');
+    cb(null, './static');
   },
   filename: function (req, file, cb) {
-    cb(null, `${post_id}`);
+    cb(null, file.originalname);
   },
 });
 
-var upload = multer({ storage: storage }).single('file');
+var upload = multer({ storage: storage }).single('img');
 
-router.post('/img', upload.single('img'), (req, res) => {
-  res.json(req.file);
-  console.log(req.file);
+router.post('/upload', upload, async (req, res) => {
+  res.send(true);
 });
 
-router.post('/signup', async (req, res) => {
-  const result = await UserService.signup(req.body.user_id, req.body.user_email, req.body.user_password, req.body.user_nickname, req.body.user_gender, req.body.user_phonenumber, req.body.user_age);
+router.post('/post', async (req, res) => {
+  const result = await FeedService.addPost(req.body.user_id, req.body.content, req.body.topic_id);
+  res.send(result);
+});
+
+router.post('/comment', async (req, res) => {
+  const result = await FeedService.addComment(req.body.user_id, req.body.post_id, req.body.content);
+  res.send(result);
+});
+
+router.post('/search', async (req, res) => {
+  const result = await FeedService.getSearchWord(req.body.word);
+  res.send(result);
+});
+
+router.post('/search/result', async (req, res) => {
+  const result = await FeedService.getSearchResult(req.body.topic_id, req.body.user_id);
+  res.send(result);
+});
+
+router.get('/hot', async (req, res) => {
+  const result = await FeedService.getHotFeed();
+  res.send(result);
+});
+
+router.post('/following', async (req, res) => {
+  const result = await FeedService.getFollowingFeed(req.body.user_id);
+  res.send(result);
+});
+
+router.post('/like', async (req, res) => {
+  const result = await FeedService.postLike(req.body.post_id, req.body.user_id, req.body.is_like);
   res.send(result);
 });
 
