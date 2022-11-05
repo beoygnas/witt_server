@@ -3,11 +3,11 @@ import config from './database/dbconfig.js';
 
 const TopicService = {
   addTopic: async (title, user_id) => {
+    let result = [];
     try {
       const pool = sql.createPool(config);
       const connection = await pool.getConnection(async (conn) => conn);
-      let result = [];
-
+    
       try {
         await connection.beginTransaction();
         try {
@@ -36,13 +36,13 @@ const TopicService = {
   },
 
   voteTopic : async (untopic_id, user_id) => {
+    let result = [];
     try {
       const pool = sql.createPool(config);
       const connection = await pool.getConnection(async (conn) => conn);
       
       let isLiked = [];
-      let result = [];
-
+  
       try {
         await connection.beginTransaction();
         try {          
@@ -100,17 +100,17 @@ const TopicService = {
   },
 
   randomTopic : async (user_id) => {
+    let result = [];
     try {
       const pool = sql.createPool(config);
       const connection = await pool.getConnection(async (conn) => conn);
-      let result = [];
       let topics = [];
 
       try {
         await connection.beginTransaction();
         try {
           topics = await connection.query(
-            `select * from Untopic order by rand()`, [user_id]);
+            `select * from Untopic order by rand() LIMIT 0, 5`, [user_id]);
           topics = topics[0];
 
           result = {
@@ -164,8 +164,6 @@ const TopicService = {
       throw new Error(`USER/${error}`);
     }
   },
-
-
 };
 
 export default TopicService;

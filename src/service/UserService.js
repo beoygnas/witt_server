@@ -3,10 +3,11 @@ import config from './database/dbconfig.js';
 
 const UserService = {
   signup: async (user_id, user_pw) => {
+    let result = [];
     try {
       const pool = sql.createPool(config);
       const connection = await pool.getConnection(async (conn) => conn);
-      let result = [];
+      
 
       try {
         await connection.beginTransaction();
@@ -35,14 +36,11 @@ const UserService = {
   },
 
   login: async (user_id, user_pw) => {
+    let result = [];
     try {
       const pool = sql.createPool(config);
       const connection = await pool.getConnection(async (conn) => conn);
       
-      let result = [];
-
-      
-
       try {
         await connection.beginTransaction();
         try {
@@ -76,10 +74,10 @@ const UserService = {
   },
 
   userinfo : async (user_id) => {
+    let result = [];
     try {
       const pool = sql.createPool(config);
       const connection = await pool.getConnection(async (conn) => conn);
-      let result = [];
       let posts = [];
       let followers = -1;
 
