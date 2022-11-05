@@ -7,25 +7,25 @@ const router = new Router();
 
 router.post('/addTopic', async (req, res) => {
   const result = await TopicService.addTopic(req.body.title, req.body.user_id);
-  console.log(result);
+  console.log('/addTopic', result);
   res.send(result);
 });
 
 router.post('/voteTopic', async (req, res) => {
   const result = await TopicService.voteTopic(req.body.untopic_id, req.body.user_id);
-  console.log(result);
+  console.log('/voteTopic', result);
   res.send(result);
 });
 
 router.post('/randomTopic', async (req, res) => {
   const result = await TopicService.randomTopic();
-  console.log(result);
+  console.log('/randomTopic', asyncresult);
   res.send(result);
 });
 
 router.post('/confirmTopic', async (req, res) => {
   const result = await TopicService.confirmTopic(req.body.title, req.body.endtime);
-  console.log(result);
+  console.log('/confirmTopic', result);
   res.send(result);
 });
 
