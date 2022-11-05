@@ -88,7 +88,7 @@ const UserService = {
         try {
           posts = await connection.query(
             `select * from Post where user_id = ?`, [user_id]);
-          posts = posts[0][0];
+          posts = posts[0];
 
           followers = await connection.query(
             `select * from User_follow where following_id = ?`, [user_id]);

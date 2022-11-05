@@ -7,10 +7,11 @@ insert into User values('sangyeob', '0429');
 
 create table User_follow(
 
-    user_id varchar(255) primary key,
+    user_id varchar(255),
     following_id varchar(255),
     foreign key(user_id) references User(user_id),
-    foreign key(following_id) references User(user_id)
+    foreign key(following_id) references User(user_id),
+    primary key(user_id, following_id)
 )
 
 insert into User_follow values('sagnyeob', 'hyejin');
@@ -45,6 +46,14 @@ create table Comment(
     foreign key(writer_id) references User(user_id),
     foreign key(post_id) references Post(post_id)
 );
+
+create table Untopic_like(
+    untopic_id  int AUTO_INCREMENT primary key,
+    user_id varchar(255),
+    regdata TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    foreign key(untopic_id) references Untopic(untopic_id)
+    foreign key(user_id) references User(user_id)
+)
 
 insert into Post(null, )
 
