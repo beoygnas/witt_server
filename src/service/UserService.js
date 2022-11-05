@@ -90,6 +90,7 @@ const UserService = {
 
           let is_following = await connection.query(`SELECT following_id FROM User_follow WHERE user_id = ?`, [user_id]);
           is_following = posts[0];
+          console.log(is_following);
 
           if (is_following.length == 0) {
             // 팔로우 안 함
