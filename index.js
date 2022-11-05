@@ -2,7 +2,9 @@ import express from 'express';
 import userController from './src/controller/UserController.js';
 import feedController from './src/controller/FeedController.js';
 import topicController from './src/controller/TopicController.js';
+import { hostname } from 'os';
 
+const hostName = '10.0.22.1';
 const app = express();
 //정적 파일 사용하기
 app.use(express.static('public'));
@@ -32,5 +34,5 @@ app.get((req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`server is listening at localhost:${port}`);
+  console.log(`server is listening at ${hostName}:${port}`);
 });

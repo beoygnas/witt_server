@@ -65,4 +65,9 @@ router.post('/like', async (req, res) => {
   res.send(result);
 });
 
+router.get('/temp', async (req, res) => {
+  const result = await FeedService.temp();
+  res.send(result);
+});
+
 export default router;

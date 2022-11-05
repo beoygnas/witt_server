@@ -266,6 +266,11 @@ const FeedService = {
       throw new Error(`FEED/${error}`);
     }
   },
+
+  temp: async () => {
+    console.log('hello world');
+    return true;
+  },
 };
 
 export default FeedService;
