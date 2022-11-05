@@ -92,7 +92,7 @@ const UserService = {
           is_following = posts[0];
           console.log(typeof is_following);
 
-          if (is_following == 'undefined') {
+          if (typeof is_following == 'undefined') {
             // 팔로우 안 함
             is_following = null;
           } else {
