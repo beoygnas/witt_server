@@ -2,12 +2,15 @@ import sql from 'mysql2/promise';
 import config from './database/dbconfig.js';
 
 const FeedService = {
-  addPost: async (user_id, content, topic_id) => {
+  addPost: async (user_id, content) => {
     try {
       const pool = sql.createPool(config);
       const connection = await pool.getConnection(async (conn) => conn);
       try {
         await connection.beginTransaction();
+
+        const _topic_id = await connection.query('SELECT topic_id FROM Topic ORDER BY regdata DESC LIMIT 0, 1');
+        const topic_id = JSON.parse(JSON.stringify(_topic_id))[0][0]['topic_id'];
 
         await connection.query(`
             INSERT INTO Post(user_id, content, topic_id) VALUES ('${user_id}', '${content}', '${topic_id}');
@@ -194,7 +197,7 @@ const FeedService = {
         await connection.beginTransaction();
 
         const _hot_feed = await connection.query(`
-            SELECT p.post_id, p.user_id, p.content, p.regdata, p.likes, pl.user_id AS is_like
+            SELECT p.post_id, p.topic_id, p.user_id, p.content, p.regdata, p.likes, pl.user_id AS is_like
                 FROM Post p
                 LEFT JOIN Post_like pl ON pl.user_id = p.user_id
             WHERE p.topic_id = (SELECT topic_id FROM Topic ORDER BY regdata DESC LIMIT 0, 1)
