@@ -27,51 +27,61 @@ router.post('/upload', upload, async (req, res) => {
 
 router.post('/post', async (req, res) => {
   const result = await FeedService.addPost(req.body.user_id, req.body.content, req.body.topic_id);
+  console.log(result);
   res.send(result);
 });
 
 router.post('/comment', async (req, res) => {
   const result = await FeedService.addComment(req.body.user_id, req.body.post_id, req.body.content);
+  console.log(result);
   res.send(result);
 });
 
 router.post('/search', async (req, res) => {
   const result = await FeedService.getSearchWord(req.body.word);
+  console.log(result);
   res.send(result);
 });
 
 router.post('/search/result', async (req, res) => {
   const result = await FeedService.getSearchResult(req.body.topic_id, req.body.user_id);
+  console.log(result);
   res.send(result);
 });
 
 router.get('/now', async (req, res) => {
   const result = await FeedService.getNowTopic();
+  console.log(result);
   res.send(result);
 });
 
 router.post('/hot', async (req, res) => {
   const result = await FeedService.getHotFeed(req.body.topic_id);
+  console.log(result);
   res.send(result);
 });
 
 router.post('/following', async (req, res) => {
   const result = await FeedService.getFollowingFeed(req.body.topic_id, req.body.user_id);
+  console.log(result);
   res.send(result);
 });
 
 router.post('/like', async (req, res) => {
   const result = await FeedService.postLike(req.body.post_id, req.body.user_id, req.body.is_like);
+  console.log(result);
   res.send(result);
 });
 
 router.get('/temp', async (req, res) => {
   const result = await FeedService.temp();
+  console.log(result);
   res.send(result);
 });
 
 router.post('/hotTopic', async (req, res) => {
   const result = await FeedService.getHotTopic();
+  console.log(result);
   res.send(result);
 });
 
