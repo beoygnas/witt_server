@@ -19,7 +19,7 @@ router.post('/voteTopic', async (req, res) => {
 
 router.post('/randomTopic', async (req, res) => {
   const result = await TopicService.randomTopic();
-  console.log('/randomTopic', asyncresult);
+  console.log('/randomTopic', result);
   res.send(result);
 });
 
