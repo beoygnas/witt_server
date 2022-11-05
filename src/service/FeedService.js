@@ -1,16 +1,15 @@
-import sql from 'mysql2/promise';
-import config from './database/dbconfig.js';
-
+const sql = require('mysql2/promise');
 const UserService = {
-  signup: async (user_id, user_email, user_passwrod, user_nickname, user_gender, user_phonenumber, user_age) => {
+  addPost: async (user_id, content, imageFile, topic_id) => {
     try {
       const pool = sql.createPool(config);
       const connection = await pool.getConnection(async (conn) => conn);
-
       try {
         await connection.beginTransaction();
         try {
-          await connection.query(`UPDATE User SET nickname = '${user_id}' WHERE userId = '${user_email}'`);
+          await connection.query(`
+            INSERT INTO Post(user)
+          `);
         } catch (error) {
           return false;
         }
