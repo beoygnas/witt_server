@@ -45,13 +45,18 @@ router.post('/search/result', async (req, res) => {
   res.send(result);
 });
 
-router.get('/hot', async (req, res) => {
-  const result = await FeedService.getHotFeed();
+router.get('/now', async (req, res) => {
+  const result = await FeedService.getFollowingFeed();
+  res.send(result);
+});
+
+router.post('/hot', async (req, res) => {
+  const result = await FeedService.getHotFeed(req.body.topic_id);
   res.send(result);
 });
 
 router.post('/following', async (req, res) => {
-  const result = await FeedService.getFollowingFeed(req.body.user_id);
+  const result = await FeedService.getFollowingFeed(req.body.topic_id, req.body.user_id);
   res.send(result);
 });
 

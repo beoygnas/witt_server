@@ -99,7 +99,44 @@ const FeedService = {
             SELECT p.post_id, p.user_id, p.content, p.regdata, p.likes, pl.user_id AS is_like
                 FROM Post p
                 LEFT JOIN Post_like pl ON pl.user_id = p.user_id
-            WHERE topic_id = '${topic_id}' LIMIT 0, 10
+            WHERE topic_id = '${topic_id}' ORDER BY p.likes DESC LIMIT 0, 10
+            `);
+        const hot_feed = JSON.parse(JSON.stringify(_hot_feed))[0];
+
+        const _following_feed = await connection.query(`
+            SELECT p.post_id, p.user_id, p.content, p.regdata, p.likes, pl.user_id AS is_like
+                FROM Post p
+                INNER JOIN User_follow uf ON uf.following_id = p.user_id
+                LEFT JOIN Post_like pl ON pl.user_id = p.user_id
+            WHERE topic_id = '${topic_id}' AND uf.user_id = '${user_id}'
+            LIMIT 10, 0
+            `);
+        const following_feed = JSON.parse(JSON.stringify(_following_feed))[0];
+
+        await connection.commit();
+        return { hot_feed, following_feed };
+      } catch (err) {
+        await connection.rollback();
+        throw err;
+      } finally {
+        connection.release();
+        pool.end();
+      }
+    } catch (error) {
+      throw new Error(`FEED/${error}`);
+    }
+  },
+
+  // 지금의 주제
+  getNowTopic: async () => {
+    try {
+      const pool = sql.createPool(config);
+      const connection = await pool.getConnection(async (conn) => conn);
+      try {
+        await connection.beginTransaction();
+
+        const _hot_feed = await connection.query(`
+            SELECT topic_id, title, regdata, endtime FROM Topic ORDER BY regdata DESC
             `);
         const hot_feed = JSON.parse(JSON.stringify(_hot_feed))[0];
 
@@ -128,7 +165,7 @@ const FeedService = {
   },
 
   // 팔로잉 피드 가쟈오기
-  getFollowingFeed: async (user_id) => {
+  getFollowingFeed: async (topic_id, user_id) => {
     try {
       const pool = sql.createPool(config);
       const connection = await pool.getConnection(async (conn) => conn);
@@ -140,7 +177,7 @@ const FeedService = {
                 FROM Post p
                 INNER JOIN User_follow uf ON uf.following_id = p.user_id
                 LEFT JOIN Post_like pl ON pl.user_id = p.user_id
-            WHERE uf.user_id = '${user_id}'
+            WHERE uf.user_id = '${user_id}' AND p.topic_id = ${topic_id}
             LIMIT 10, 0
             `);
         const following_feed = JSON.parse(JSON.stringify(_following_feed))[0];
@@ -159,8 +196,8 @@ const FeedService = {
     }
   },
 
-  // 인기 피드 가쟈오기
-  getHotFeed: async () => {
+  // 랜덤 피드 가쟈오기
+  getHotFeed: async (topic_id) => {
     try {
       const pool = sql.createPool(config);
       const connection = await pool.getConnection(async (conn) => conn);
@@ -171,7 +208,8 @@ const FeedService = {
             SELECT p.post_id, p.user_id, p.content, p.regdata, p.likes, pl.user_id AS is_like
                 FROM Post p
                 LEFT JOIN Post_like pl ON pl.user_id = p.user_id
-            LIMIT 0, 10
+            WHERE p.topic_id = ${topic_id}
+            ORDER BY rand() LIMIT 0, 10
             `);
         const hot_feed = JSON.parse(JSON.stringify(_hot_feed))[0];
 
