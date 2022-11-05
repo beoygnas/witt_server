@@ -256,10 +256,70 @@ const FeedService = {
     }
   },
 
-  temp: async () => {
-    console.log('hello world');
-    return true;
+  getHotTopic: async (topic_id) => {
+    try {
+      const pool = sql.createPool(config);
+      const connection = await pool.getConnection(async (conn) => conn);
+      try {
+        await connection.beginTransaction();
+
+        const _hot_feed = await connection.query(`
+            SELECT p.post_id, p.user_id, p.content, p.regdata, p.likes, pl.user_id AS is_like
+                FROM Post p
+                LEFT JOIN Post_like pl ON pl.user_id = p.user_id
+            WHERE p.topic_id = ${topic_id}
+            ORDER BY rand() LIMIT 0, 10
+            `);
+        const hot_feed = JSON.parse(JSON.stringify(_hot_feed))[0];
+
+        await connection.commit();
+        return hot_feed;
+      } catch (err) {
+        await connection.rollback();
+        throw err;
+      } finally {
+        connection.release();
+        pool.end();
+      }
+    } catch (error) {
+      throw new Error(`FEED/${error}`);
+    }
   },
+
+  getHotTopic : async () => {
+    let result = [];
+    try {
+      const pool = sql.createPool(config);
+      const connection = await pool.getConnection(async (conn) => conn);
+      let topics = [];
+
+      try {
+        await connection.beginTransaction();
+        try {
+          topics = await connection.query(
+            `select * from Topic order by rand() LIMIT 0, 5`);
+          topics = topics[0];
+
+          result = {
+            "hotopics" : topics,
+          }
+        } catch (error) {
+          return false;
+        }
+        await connection.commit();
+      } catch (err) {
+        await connection.rollback();
+        throw err;
+      } finally {
+        connection.release();
+        pool.end();
+      }
+      return result;
+    } catch (error) {
+      throw new Error(`USER/${error}`);
+    }
+  },
+  
 };
 
 export default FeedService;

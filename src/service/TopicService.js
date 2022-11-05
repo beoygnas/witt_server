@@ -99,7 +99,7 @@ const TopicService = {
     }
   },
 
-  randomTopic : async (user_id) => {
+  randomTopic : async () => {
     let result = [];
     try {
       const pool = sql.createPool(config);
@@ -110,7 +110,7 @@ const TopicService = {
         await connection.beginTransaction();
         try {
           topics = await connection.query(
-            `select * from Untopic order by rand() LIMIT 0, 5`, [user_id]);
+            `select * from Untopic order by rand() LIMIT 0, 5`);
           topics = topics[0];
 
           result = {

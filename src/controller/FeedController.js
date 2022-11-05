@@ -70,4 +70,9 @@ router.get('/temp', async (req, res) => {
   res.send(result);
 });
 
+router.post('/hotTopic', async (req, res) => {
+  const result = await FeedService.getHotTopic();
+  res.send(result);
+});
+
 export default router;
