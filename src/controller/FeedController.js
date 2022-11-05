@@ -56,13 +56,13 @@ router.get('/now', async (req, res) => {
 });
 
 router.post('/hot', async (req, res) => {
-  const result = await FeedService.getHotFeed(req.body.topic_id);
+  const result = await FeedService.getHotFeed();
   console.log('/hot', result);
   res.send(result);
 });
 
 router.post('/following', async (req, res) => {
-  const result = await FeedService.getFollowingFeed(req.body.topic_id, req.body.user_id);
+  const result = await FeedService.getFollowingFeed(req.body.user_id);
   console.log('/following', result);
   res.send(result);
 });
