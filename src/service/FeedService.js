@@ -200,7 +200,7 @@ const FeedService = {
         if (is_like == 1) {
           // 좋아요
           await connection.query(`
-            INSERT IGNORE INTO Post_like (post_id, user_id) VALUE (${post_id}, '${user_id}')
+            INSERT INTO Post_like (post_id, user_id) VALUE (${post_id}, '${user_id}')
             `);
           await connection.query(`
             UPDATE Post SET likes = (SELECT COUNT(*) FROM Post_like WHERE post_id = ${post_id})
