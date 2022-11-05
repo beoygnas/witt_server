@@ -89,7 +89,7 @@ const UserService = {
           posts = posts[0];
           console.log(`SELECT following_id FROM User_follow WHERE user_id = ${user_id} AND following_id = ${profile_user_id}`);
           let is_following = await connection.query(`SELECT following_id FROM User_follow WHERE user_id = ? AND following_id = ?`, [user_id, profile_user_id]);
-          is_following = is_following[0];
+          is_following = is_following[0][0];
           console.log(typeof is_following);
 
           if (typeof is_following == 'undefined') {
