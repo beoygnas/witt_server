@@ -1,0 +1,20 @@
+{
+  "name": "@j3p3/feed",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "invoke-local": "sls invoke local -f $npm_config_handler -p ../../mocks/feed/$npm_config_handler.json"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@codime/libs": "1.0.0",
+    "@codime/middlewares": "1.0.0",
+    "@middy/core": "1.5.1",
+    "@middy/validator": "^2.4.1",
+    "mysql2": "^2.2.5"
+  },
+  "devDependencies": {}
+}
