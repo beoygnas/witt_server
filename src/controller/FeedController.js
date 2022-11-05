@@ -46,7 +46,7 @@ router.post('/search/result', async (req, res) => {
 });
 
 router.get('/now', async (req, res) => {
-  const result = await FeedService.getFollowingFeed();
+  const result = await FeedService.getNowTopic();
   res.send(result);
 });
 

@@ -134,24 +134,13 @@ const FeedService = {
       const connection = await pool.getConnection(async (conn) => conn);
       try {
         await connection.beginTransaction();
-
-        const _hot_feed = await connection.query(`
-            SELECT topic_id, title, regdata, endtime FROM Topic ORDER BY regdata DESC
+        const _now_topic = await connection.query(`
+            SELECT topic_id, title, regdata, endtime FROM Topic ORDER BY regdata DESC LIMIT 0, 1
             `);
-        const hot_feed = JSON.parse(JSON.stringify(_hot_feed))[0];
-
-        const _following_feed = await connection.query(`
-            SELECT p.post_id, p.user_id, p.content, p.regdata, p.likes, pl.user_id AS is_like
-                FROM Post p
-                INNER JOIN User_follow uf ON uf.following_id = p.user_id
-                LEFT JOIN Post_like pl ON pl.user_id = p.user_id
-            WHERE topic_id = '${topic_id}' AND uf.user_id = '${user_id}'
-            LIMIT 10, 0
-            `);
-        const following_feed = JSON.parse(JSON.stringify(_following_feed))[0];
+        const now_topic = JSON.parse(JSON.stringify(_now_topic))[0][0];
 
         await connection.commit();
-        return { hot_feed, following_feed };
+        return { now_topic };
       } catch (err) {
         await connection.rollback();
         throw err;
