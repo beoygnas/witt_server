@@ -74,7 +74,7 @@ const UserService = {
     }
   },
 
-  userinfo: async (user_id) => {
+  userinfo: async (user_id, profile_user_id) => {
     let result = [];
     try {
       const pool = sql.createPool(config);
@@ -85,10 +85,10 @@ const UserService = {
       try {
         await connection.beginTransaction();
         try {
-          posts = await connection.query(`select * from Post where user_id = ?`, [user_id]);
+          posts = await connection.query(`select * from Post where user_id = ?`, [profile_user_id]);
           posts = posts[0];
 
-          let is_following = await connection.query(`SELECT following_id FROM User_follow WHERE user_id = ?`, [user_id]);
+          let is_following = await connection.query(`SELECT following_id FROM User_follow WHERE user_id = ? AND following_id = ?`, [user_id, profile_user_id]);
           is_following = posts[0];
           console.log(typeof is_following);
 
