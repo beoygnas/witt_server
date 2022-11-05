@@ -108,6 +108,7 @@ const UserService = {
             followers: followers,
           };
         } catch (error) {
+          console.log(error);
           return false;
         }
         await connection.commit();
