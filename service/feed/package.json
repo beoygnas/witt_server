@@ -10,8 +10,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@codime/libs": "1.0.0",
-    "@codime/middlewares": "1.0.0",
     "@middy/core": "1.5.1",
     "@middy/validator": "^2.4.1",
     "mysql2": "^2.2.5"

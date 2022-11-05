@@ -7,6 +7,7 @@ module.exports.handler = async (event) => {
     const connection = await pool.getConnection(async (conn) => conn);
     try {
       await connection.beginTransaction();
+
       await connection.commit();
       return {
         statusCode: 200,
