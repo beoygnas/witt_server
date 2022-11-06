@@ -268,7 +268,7 @@ const FeedService = {
       try {
         await connection.beginTransaction();
         try {
-          topics = await connection.query(`select * from Topic order by rand() LIMIT 0, 5`);
+          topics = await connection.query(`select * from Topic order by rand() LIMIT 0, 6`);
           topics = topics[0];
 
           result = {
